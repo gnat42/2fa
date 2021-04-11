@@ -78,6 +78,7 @@ jobs:
                     # Test against upcoming Symfony 5.3
                     -   php-version: '8.0'
                         symfony-version: '5.x-dev as 5.3.0'
+                        composer-require: 'symfony/runtime:"5.x-dev as 5.3.0"'
 
         steps:
             -   name: 'Checkout code'
@@ -99,6 +100,10 @@ jobs:
             -   name: "Require Symfony version"
                 if: ${{ matrix.symfony-version != 'lowest' }}
                 run: composer require "symfony/symfony:${{ matrix.symfony-version }}" --no-update
+
+            -   name: "Require extra Composer dependencies"
+                if: ${{ matrix.composer-require }}
+                run: composer require ${{ matrix.composer-require }} --no-update
 
             -   name: 'Install Composer dependencies'
                 uses: ramsey/composer-install@v1
@@ -141,11 +146,13 @@ jobs:
                     # Upcoming Symfony 5.3
                     -   php-version: '8.0'
                         symfony-version: '5.x-dev as 5.3.0'
+                        composer-require: 'symfony/runtime:"5.x-dev as 5.3.0"'
                         app-config: 'default'
 
                     # AUTHENTICATORS configuration (experimental security system)
                     -   php-version: '8.0'
                         symfony-version: '5.x-dev as 5.3.0'
+                        composer-require: 'symfony/runtime:"5.x-dev as 5.3.0"'
                         app-config: 'authenticators'
 
         steps:
@@ -168,6 +175,10 @@ jobs:
             -   name: "Require Symfony version"
                 if: ${{ matrix.symfony-version != 'lowest' }}
                 run: composer require "symfony/symfony:${{ matrix.symfony-version }}" --no-update --working-dir=app
+
+            -   name: "Require extra Composer dependencies"
+                if: ${{ matrix.composer-require }}
+                run: composer require ${{ matrix.composer-require }} --no-update --working-dir=app
 
             -   name: 'Install Composer dependencies'
                 uses: ramsey/composer-install@v1
